@@ -1,0 +1,14 @@
+Package: SC19051
+Type: Package
+Title: Clustering in the gaussian mixture model
+Version: 0.1.0
+Author: Sirui Lin
+Maintainer: Sirui Lin <lsr@mail.ustc.edu.cn>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL (>= 2)
+Encoding: UTF-8
+Imports: Rcpp (>= 0.12.16), knitr, rmarkdown
+VignetteBuilder: knitr 
+LinkingTo: Rcpp
+RoxygenNote: 6.1.1

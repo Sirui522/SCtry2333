@@ -1,0 +1,76 @@
+---
+title: "Introduction to SC19051"
+author: "Sirui Lin"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to SC19051}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Overview
+
+__SC19051__ is a simple R package developed to implement the constrained Newton method(_CNM.R_) and compare it to the EM algorithm(_EM.R_).
+
+## Introduction to Gaussian Mixture Model(GMM)
+
+The density of a Gaussian mixture model is of the form:
+$$
+f(x ; G)=\int_{\Omega} f(x ; \theta) \mathrm{d} G(\theta)
+$$
+
+where $f(x ; \theta), x \in \mathcal{X}, \theta \in \Omega \subset \mathbb{R}$ is the kernel density and $G(\theta)$ is the mixing distribution.   
+  
+Given a random sample x1,...,xn from density above, the log-likelihood of G has the form:
+$$
+l(G)=\sum_{i=1}^{n} \log \left\{\int_{\Omega} f\left(x_{i} ; \theta\right) \mathrm{d} G(\theta)\right\}
+$$
+
+The NPMLE $\hat{G}$ maximizes $l(G)$ is known to be discrete and then has the form: $G(\theta)=\sum_{j=1}^{m} \pi_{j} \delta_{\theta_{j}}$, where $m \leq n$.   
+
+The directional derivative from $G$ to $\delta_{\theta}$, also known as gradient function is deﬁned as:
+$$
+\begin{aligned}
+d(\theta ; G) &\left.\equiv \frac{\partial l\{(1-\varepsilon) G+\varepsilon \delta_{\theta}\}}{\partial \varepsilon}\right|_{\varepsilon=0} \\
+&=\sum_{i=1}^{n} \frac{f\left(x_{i} ; \theta\right)}{f\left(x_{i} ; G\right)}-n
+\end{aligned}
+$$
+
+and we have:
+
+$$
+\hat{G} \text { maximizes } l(G) \Leftrightarrow \hat{G} \text { minimizes } \sup _{\theta}\{d(\theta ; G)\} \Leftrightarrow \sup _{\theta}\{d(\theta ; \hat{G})\}=0
+$$
+
+---
+
+## Introduction to Constrained Newton Method
+
+$\mathrm{Algorithm\ 1\ (CN)} .$ Set $s=0 .$ From an initial estimate $\mathrm{G}_{0}$ with finite support and $l\left(G_{0}\right)>-\infty,$ repeat the following steps.  
+
+Step 1: compute 
+$$
+\theta_{s}^{*}=\arg \max _{\theta \in \Omega}\left\{d\left(\theta ; G_{s}\right)\right\} .
+$$
+If $d\left(\theta_{s}^{*};G_{s}\right)=0$, stop.  
+
+Step 2: set 
+$$
+\theta_{s}^{+}=\left(\theta_{s}^{\mathrm{T}}, \theta_{s}^{*}\right)^{\mathrm{T}}
+$$
+and 
+$$
+\pi_{s}^{+}=\left(\pi_{s}^{\mathrm{T}}, 0\right)^{\mathrm{T}}
+$$ 
+
+Denote by $\pi_{s+1}^{-}$ the constrained solution of
+minimizing $Q\left(\pi^{\prime} | \pi_{s}^{+}, {\theta}_{s}^{+}\right) .$   
+
+Step 3: discard all support points with zero entries in $\pi_{s+1}^{-}$, which gives $\theta_{s+1}$ and $\pi_{s+1}$ of $G_{s+1 }$. Set $s=s+1$ .
+
+---
+
+## Evaluation of Estimation
+
+We can plot the function of $\theta$ :$d(\theta, G) .$ using _deri.plot_. 
